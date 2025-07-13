@@ -3,13 +3,30 @@ using GameShelf.Entities;
 using GameShelf.Repositories;
 using GameShelf.UI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
-using (GameshelfContext db = new GameshelfContext())
-{
-    var repository = new GameRepository(db);
+var config = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
 
+var connectionString = config.GetConnectionString("DefaultConnection");
 
-    InterfaceSwitcher switcher = InterfaceSwitcher.MainMenu;
+var projectRoot = Directory.GetParent(AppContext.BaseDirectory)!
+                   .Parent!.Parent!.Parent!.FullName;
+
+connectionString = connectionString!.Replace("%PROJECT_PATH%", projectRoot);
+
+var options = new DbContextOptionsBuilder<GameshelfContext>()
+    .UseSqlite(connectionString)
+    .Options;
+
+var factory = new PooledDbContextFactory<GameshelfContext>(options);
+
+var repository = new GameRepository(factory);
+
+InterfaceSwitcher switcher = InterfaceSwitcher.MainMenu;
 
     while (switcher != InterfaceSwitcher.Exit)
     {
@@ -35,7 +52,7 @@ using (GameshelfContext db = new GameshelfContext())
 
     Console.WriteLine("See ya, bye!");
 
-}
+
 
 
 
