@@ -25,12 +25,11 @@ namespace GameShelf.Repositories
             return await context.Games.FindAsync(id);
         }
 
-        public async Task<List<GameEntity>?> GetByNameAsync(string name)
+        public async Task<GameEntity?> GetByNameAsync(string name)
         {
             using var context = _contextFactory.CreateDbContext();
             return await context.Games
-                .Where(game => EF.Functions.Like(game.Name, $"%{name}%"))
-                .ToListAsync();
+                .Where(game => EF.Functions.Like(game.Name, $"%{name}%")).FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(GameEntity entity)

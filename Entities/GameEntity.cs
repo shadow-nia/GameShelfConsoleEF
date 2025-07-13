@@ -7,10 +7,6 @@
 
         public string? Description { get; set; }
 
-        //public int GenreId { get; set; }
-        //public GenreEntity? Genre { get; set; }
-        //public string? Abrakadabra { get; set; }
-
         public string? Genre { get; set; }
 
         public double Rating { get; set; }

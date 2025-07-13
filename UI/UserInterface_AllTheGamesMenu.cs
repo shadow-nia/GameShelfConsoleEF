@@ -18,7 +18,7 @@ namespace GameShelf.UI
                 Console.WriteLine("----------------------------------------------------------");
             }
             Console.WriteLine("Please choose an option:");
-            Console.WriteLine("1.Back to Main Menu\n2.Find your game\n3.Exit");
+            Console.WriteLine("1.Add a new game\n2.Back to Main Menu\n3.Find your game\n4.Exit");
             Console.WriteLine("----------------------------------------------------------");
             string? chosenOption = Console.ReadLine();
             if (chosenOption == null)
@@ -31,10 +31,12 @@ namespace GameShelf.UI
 
             {
                 case "1":
-                    return InterfaceSwitcher.MainMenu;
+                    return InterfaceSwitcher.AddGameMenu;
                 case "2":
-                    return InterfaceSwitcher.FindYourGameMenu;
+                    return InterfaceSwitcher.MainMenu;
                 case "3":
+                    return InterfaceSwitcher.FindYourGameMenu;
+                case "4":
                     return InterfaceSwitcher.Exit;
                 default:
                     Console.WriteLine("Sorry, but your request was incorrect, try again!");

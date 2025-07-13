@@ -18,10 +18,10 @@ namespace GameShelf.UI
         }
 
 
-        public static InterfaceSwitcher ShowFoundGames(List<GameEntity> games)
+        public static InterfaceSwitcher ShowFoundGames(GameEntity game)
         {
 
-            if(games.Count == 0)
+            if(game.Id is 0)
             {
                 Console.WriteLine("Sorry, but we can't find any game on your request.");
                 Console.WriteLine("Try another game");
@@ -30,11 +30,10 @@ namespace GameShelf.UI
             }
             else { 
 
-                foreach (var game in games)
-                {
+
                     Console.WriteLine($" -{game.Name}\n{game.Genre} - {game.Price} - {game.Rating}");
                     Console.WriteLine("----------------------------------------------------------");
-                }
+                
             Console.WriteLine("Please choose an option:");
             Console.WriteLine("1.Back to Main Menu\n2.Watch all the games\n3.Exit");
             Console.WriteLine("----------------------------------------------------------");

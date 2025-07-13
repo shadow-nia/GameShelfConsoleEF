@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
+
 var config = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
@@ -18,6 +19,8 @@ var projectRoot = Directory.GetParent(AppContext.BaseDirectory)!
 
 connectionString = connectionString!.Replace("%PROJECT_PATH%", projectRoot);
 
+
+
 var options = new DbContextOptionsBuilder<GameshelfContext>()
     .UseSqlite(connectionString)
     .Options;
@@ -25,6 +28,11 @@ var options = new DbContextOptionsBuilder<GameshelfContext>()
 var factory = new PooledDbContextFactory<GameshelfContext>(options);
 
 var repository = new GameRepository(factory);
+
+
+
+GameEntity? lastFoundGame = null;
+GameEntity? selectedGame = null;
 
 InterfaceSwitcher switcher = InterfaceSwitcher.MainMenu;
 
@@ -40,13 +48,24 @@ InterfaceSwitcher switcher = InterfaceSwitcher.MainMenu;
                 break;
             case InterfaceSwitcher.FindYourGameMenu:
                 string gameName = UserInterface.AskGameName();
-                var foundGames = await repository.GetByNameAsync(gameName);
-                switcher = UserInterface.ShowFoundGames(foundGames ?? new List<GameEntity>());
+                var foundGame = await repository.GetByNameAsync(gameName);
+                lastFoundGame = foundGame ?? new GameEntity();  
+                switcher = UserInterface.ShowFoundGames(foundGame ?? new GameEntity());
                 break;
-        }
-
-
-
+            case InterfaceSwitcher.AddGameMenu:
+                var (Next, dto) = UserInterface.ShowAddGameMenu();
+                var entity = new GameEntity
+                {
+                    Name = dto.Name,
+                    Description = dto.Description,
+                    Genre = dto.Genre,
+                    Rating = dto.Rating,
+                    Price = dto.Price
+                };
+                await repository.AddAsync(entity);
+                switcher = Next;
+                break;
+    }
 
     }
 

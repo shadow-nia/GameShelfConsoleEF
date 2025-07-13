@@ -11,6 +11,7 @@ namespace GameShelf.UI
         MainMenu,
         AllTheGameMenu,
         FindYourGameMenu,
+        AddGameMenu,
         EditGameMenu,
         Exit
     }
